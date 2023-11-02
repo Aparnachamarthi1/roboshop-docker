@@ -3,70 +3,72 @@ networks:
     driver: bridge
 services:
   mongodb:
-    image: mongodb:v1
+    image: devarachandrasekhar/mongodb:v1
     container_name: mongodb
     networks:
-      - roboshop
+    - roboshop
   catalogue:
-    image: catalogue:v1
+    image: devarachandrasekhar/catalogue:v1
     container_name: catalogue
     networks:
     - roboshop
     depends_on:
     - mongodb
   redis:
-    image: redis
+    image: redis:latest
     container_name: redis
     networks:
-      - roboshop
+    - roboshop
   user:
-    image: user:v1
+    image: devarachandrasekhar/user:v1
     container_name: user
     networks:
-      - roboshop
+    - roboshop
     depends_on:
-      - mongodb
-      - redis
+    - mongodb 
+    - redis
   cart:
-    image: cart:v1
+    image: devarachandrasekhar/cart:v1
     container_name: cart
     networks:
-      - roboshop
+    - roboshop
     depends_on:
-      - redis
-      - catalogue
+    - catalogue 
+    - redis
   mysql:
-    image: mysql:v1
+    image: devarachandrasekhar/mysql:v1
     container_name: mysql
     networks:
-      - roboshop
+    - roboshop    
   shipping:
-    image: shipping:v1
+    image: devarachandrasekhar/shipping:v1
     container_name: shipping
     networks:
-      - roboshop
+    - roboshop
     depends_on:
-      - cart
-      - mysql 
+    - cart 
+    - mysql
   rabbitmq:
     image: rabbitmq
     container_name: rabbitmq
     networks:
-      - roboshop
+    - roboshop
     environment:
     - RABBITMQ_DEFAULT_USER=roboshop
-    - RABBITMQ_DEFAULT_PASS=roboshop123 
+    - RABBITMQ_DEFAULT_PASS=roboshop123
+
   payment:
-    image: payment:v1
+    image: devarachandrasekhar/payment:v1
     container_name: payment
     networks:
-      - roboshop
+    - roboshop
     depends_on:
       - cart
       - user
-      - rabbitmq        
+      - rabbitmq   
+
   web:
-    image: web:v1
+    image: devarachandrasekhar/web:v1
     container_name: web
     networks:
     - roboshop
@@ -77,4 +79,4 @@ services:
     - user
     - cart
     - shipping
-    - payment
+    - payment 
