@@ -3,72 +3,70 @@ networks:
     driver: bridge
 services:
   mongodb:
-    image: devarachandrasekhar/mongodb:v1
+    image: chamirthiaparna/mongodb:v1
     container_name: mongodb
     networks:
-    - roboshop
+      - roboshop
   catalogue:
-    image: devarachandrasekhar/catalogue:v1
+    image: chamirthiaparna/catalogue:v1
     container_name: catalogue
     networks:
     - roboshop
     depends_on:
     - mongodb
   redis:
-    image: redis:latest
+    image: redis
     container_name: redis
     networks:
-    - roboshop
+      - roboshop
   user:
-    image: devarachandrasekhar/user:v1
+    image: chamirthiaparna/user:v1
     container_name: user
     networks:
-    - roboshop
+      - roboshop
     depends_on:
-    - mongodb 
-    - redis
+      - mongodb
+      - redis
   cart:
-    image: devarachandrasekhar/cart:v1
+    image: chamirthiaparna/cart:v1
     container_name: cart
     networks:
-    - roboshop
+      - roboshop
     depends_on:
-    - catalogue 
-    - redis
+      - redis
+      - catalogue
   mysql:
-    image: devarachandrasekhar/mysql:v1
+    image: chamirthiaparna/mysql:v1
     container_name: mysql
     networks:
-    - roboshop    
+      - roboshop
   shipping:
-    image: devarachandrasekhar/shipping:v1
+    image: chamirthiaparna/shipping:v1
     container_name: shipping
     networks:
-    - roboshop
+      - roboshop
     depends_on:
-    - cart 
-    - mysql
+      - cart
+      - mysql 
   rabbitmq:
     image: rabbitmq
     container_name: rabbitmq
     networks:
-    - roboshop
+      - roboshop
     environment:
     - RABBITMQ_DEFAULT_USER=roboshop
-    - RABBITMQ_DEFAULT_PASS=roboshop123
-
+    - RABBITMQ_DEFAULT_PASS=roboshop123 
   payment:
-    image: devarachandrasekhar/payment:v1
+    image: chamirthiaparna/payment:v1
     container_name: payment
     networks:
-    - roboshop
+      - roboshop
     depends_on:
       - cart
       - user
-      - rabbitmq   
-
+      - rabbitmq        
   web:
-    image: devarachandrasekhar/web:v1
+    image: chamirthiaparna/web:v1
     container_name: web
     networks:
     - roboshop
@@ -79,4 +77,4 @@ services:
     - user
     - cart
     - shipping
-    - payment 
+    - payment
